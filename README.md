@@ -1,88 +1,96 @@
-# Low-Cost 3D Surface Reconstruction Using Photometric Stereo
+# Pocket Photometric Stereo
 
-## Overview
+## Project title
 
-This repository presents a lightweight computer vision project that reconstructs the surface characteristics of a small object using four images captured under different lighting directions. The method is based on **photometric stereo**, making the project directly relevant to the **Shape From X** portion of a Computer Vision syllabus.
+**Low-Cost 3D Surface Reconstruction Using Photometric Stereo**
 
-The project is designed to be:
+## What this project does
 
-- technically strong
-- unique compared to common classroom submissions
-- CPU-friendly
-- free from deep learning and large dataset requirements
+This project reconstructs the surface shape of a small object using only:
 
-## Key Idea
+- 1 phone camera
+- 4 images
+- 4 different light directions
+- CPU-only classical computer vision
 
-The same object is photographed multiple times while the camera remains fixed and the light direction changes. From these images, the system estimates:
+The program estimates:
 
-- foreground mask
-- albedo map
-- surface normal map
-- approximate depth map
+- object mask
+- albedo image
+- normal map
+- depth map
 - relit preview
 
-This produces an interpretable 3D-like reconstruction without requiring a GPU or model training.
+## Why this project is unique
 
-## Visual Summary
+Most students choose common topics like:
 
-### Capture Setup
+- face recognition
+- object detection
+- optical flow
+- tracking
 
-![Capture setup](report_assets/capture_setup.png)
+This project is different because it is based on **Shape From X / Photometric Stereo**, which is directly present in the syllabus but usually not selected by many students.
 
-### Processing Pipeline
+## Syllabus mapping
 
-![Processing pipeline](report_assets/pipeline_overview.png)
-
-## Why This Project Stands Out
-
-- It uses **photometric stereo**, which is less commonly chosen than face detection, tracking, or object detection.
-- It is grounded in image formation and reflectance theory rather than a black-box pretrained model.
-- It gives visually strong outputs with minimal computation.
-- It maps well to advanced syllabus topics.
-
-## Syllabus Relevance
-
-- **Module 1**: image formation, filtering, image enhancement, intensity normalization
-- **Module 3**: segmentation and object extraction
+- **Module 1**: image formation, filtering, histogram/intensity normalization
+- **Module 3**: segmentation, edge/region extraction
 - **Module 5**: light at surfaces, albedo estimation, photometric stereo, shape from light
 
-## Repository Structure
+## Folder structure
 
 ```text
-.
+pocket_photometric_stereo/
+|-- run_photometric_stereo.py
+|-- requirements.txt
+|-- lights_example.json
 |-- README.md
-|-- PROJECT_REPORT.docx
-|-- PROJECT_REPORT.md
-|-- pocket_photometric_stereo/
-|   |-- run_photometric_stereo.py
-|   |-- requirements.txt
-|   |-- lights_example.json
-|   |-- README.md
-|   |-- sample_input/
-|   `-- output/
-`-- report_assets/
-    |-- capture_setup.png
-    |-- pipeline_overview.png
-    `-- outputs_overview.png
+|-- sample_input/
+|   |-- left.jpg
+|   |-- right.jpg
+|   |-- top.jpg
+|   `-- bottom.jpg
+`-- output/
 ```
 
-## Quick Start
+## How to capture input images
 
-Move into the project folder and install dependencies:
+1. Place a small matte object on a plain background.
+2. Keep the camera fixed.
+3. Turn off moving background light as much as possible.
+4. Capture 4 photos:
+   - `left.jpg` with light from left
+   - `right.jpg` with light from right
+   - `top.jpg` with light from top
+   - `bottom.jpg` with light from bottom
+5. Make sure the object does not move between photos.
+
+## Best objects
+
+- coin
+- leaf
+- clay model
+- carved eraser
+- embossed paper
+- small textured toy
+
+Avoid:
+
+- glass
+- mirrors
+- very shiny metal
+- transparent objects
+
+## Setup
+
+Install Python 3.10+ and then:
 
 ```bash
-cd pocket_photometric_stereo
 pip install -r requirements.txt
 ```
 
-Add four aligned images of the same object to `sample_input`:
-
-- `left.jpg`
-- `right.jpg`
-- `top.jpg`
-- `bottom.jpg`
-
-Then run:
+## Run
 
 ```bash
 python run_photometric_stereo.py --input-dir sample_input --output-dir output
@@ -94,54 +102,53 @@ Optional faster run:
 python run_photometric_stereo.py --input-dir sample_input --output-dir output --resize-width 640
 ```
 
-## Recommended Input Objects
+Optional custom light directions:
 
-- coin
-- leaf
-- clay model
-- embossed paper
-- carved eraser
-- textured keychain
+```bash
+python run_photometric_stereo.py --input-dir sample_input --output-dir output --lights-file lights_example.json
+```
 
-Avoid:
+## Output files
 
-- transparent objects
-- mirror-like objects
-- highly reflective metal
+- `01_mean_input.png`: average of the input images
+- `02_mask.png`: segmented object
+- `03_albedo.png`: estimated reflectance
+- `04_normal_map.png`: surface normal visualization
+- `05_depth_map.png`: approximate depth reconstruction
+- `06_relit_preview.png`: synthetic shading preview
+- `summary.json`: basic numerical summary
 
-## Main Outputs
+## Method summary
 
-The program generates:
+1. Load 4 grayscale images.
+2. Denoise and normalize intensity.
+3. Build object mask using Otsu thresholding.
+4. Use known light directions and solve the photometric stereo equation:
 
-- `01_mean_input.png`
-- `02_mask.png`
-- `03_albedo.png`
-- `04_normal_map.png`
-- `05_depth_map.png`
-- `06_relit_preview.png`
-- `summary.json`
+   `I = L * (albedo * normal)`
 
-## Documentation
+5. Estimate albedo and per-pixel surface normal.
+6. Integrate the normal field using an FFT-based method to recover depth.
+7. Save all results.
 
-- Official report: [PROJECT_REPORT.docx](PROJECT_REPORT.docx)
-- Markdown report source: [PROJECT_REPORT.md](PROJECT_REPORT.md)
-- Implementation details: [pocket_photometric_stereo/README.md](pocket_photometric_stereo/README.md)
+## Advantages
 
-## Technology Stack
-
-- Python
-- NumPy
-- OpenCV
+- low memory usage
+- no training needed
+- no GPU required
+- zero dataset cost
+- strong syllabus relevance
+- visually impressive output
 
 ## Limitations
 
-- Works best on matte surfaces.
-- Assumes a fixed camera and fixed object position.
-- Sensitive to strong shadows and harsh ambient lighting.
-- Produces approximate depth rather than exact metric 3D geometry.
+- works best for matte objects
+- needs fixed camera position
+- sensitive to shadows if lighting is too harsh
+- depth is approximate, not true metric 3D scanning
 
-## References
+## Suggested viva explanation
 
-1. Richard Szeliski, *Computer Vision: Algorithms and Applications*, Springer, 2011.
-2. D. A. Forsyth and J. Ponce, *Computer Vision: A Modern Approach*, Pearson, 2003.
-3. R. Hartley and A. Zisserman, *Multiple View Geometry in Computer Vision*, Cambridge University Press, 2004.
+You can explain the project like this:
+
+> Instead of learning from a huge dataset, this project uses physics-based computer vision. I capture the same object under multiple lighting directions, estimate how light interacts with the surface, recover surface normals and albedo, and then integrate those normals to obtain an approximate depth map. This makes the project lightweight, unique, and directly connected to the Shape From X topics in the syllabus.
