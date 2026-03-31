@@ -147,8 +147,6 @@ python run_photometric_stereo.py --input-dir sample_input --output-dir output --
 - sensitive to shadows if lighting is too harsh
 - depth is approximate, not true metric 3D scanning
 
-## Suggested viva explanation
-
-You can explain the project like this:
+##  explanation
 
 > Instead of learning from a huge dataset, this project uses physics-based computer vision. I capture the same object under multiple lighting directions, estimate how light interacts with the surface, recover surface normals and albedo, and then integrate those normals to obtain an approximate depth map. This makes the project lightweight, unique, and directly connected to the Shape From X topics in the syllabus.
