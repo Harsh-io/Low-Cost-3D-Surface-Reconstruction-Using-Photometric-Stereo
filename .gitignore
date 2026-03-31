@@ -1,0 +1,16 @@
+.chrome-headless/
+.edge-headless/
+.docx_build/
+diagram_test.png
+Thumbs.db
+Desktop.ini
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+pocket_photometric_stereo/sample_input/*
+!pocket_photometric_stereo/sample_input/.gitkeep
+
+pocket_photometric_stereo/output/*
+!pocket_photometric_stereo/output/.gitkeep
