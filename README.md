@@ -20,11 +20,11 @@ This produces an interpretable 3D-like reconstruction without requiring a GPU or
 
 ### Capture Setup
 
-![Capture setup](report_assets/capture_setup.png)
+![Capture setup](capture_setup.png)
 
 ### Processing Pipeline
 
-![Processing pipeline](report_assets/pipeline_overview.png)
+![Processing pipeline](pipeline_overview.png)
 
 ## Why This Project Stands Out
 
@@ -116,9 +116,7 @@ The program generates:
 
 ## Documentation
 
-- Official report: [PROJECT_REPORT.docx](PROJECT_REPORT.docx)
-- Markdown report source: [PROJECT_REPORT.md](PROJECT_REPORT.md)
-- Implementation details: [pocket_photometric_stereo/README.md](pocket_photometric_stereo/README.md)
+- Implementation details: [pocket_photometric_stereo/README.md](README2.md)
 
 ## Technology Stack
 
